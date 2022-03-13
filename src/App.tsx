@@ -44,9 +44,9 @@ function App() {
 
   return (
     <div className="App">
-      <DateInput onDateChange={setSelectedDate} />
-      <PayDates label="Salary" dates={salaryDates} />
-      <PayDates label="Bonus" dates={bonusDates} />
+      <DateInput onDateChange={setSelectedDate} selectedDate={selectedDate} />
+      <PayDates label="Salary pay date" dates={salaryDates} />
+      <PayDates label="Bonus pay date" dates={bonusDates} />
       <DataExport
         dataToExport={datesToExport}
         exportFileName={CSV_FILE_NAME}

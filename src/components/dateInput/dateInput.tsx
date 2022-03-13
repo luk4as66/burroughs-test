@@ -1,16 +1,27 @@
 import React, { ChangeEvent, useCallback } from "react";
 import { DateInputProps } from "./types";
 import moment from "moment";
+import { MAX_INPUT_YEAR } from "./constants";
 
-function DateInput({ onDateChange }: DateInputProps) {
+function DateInput({ onDateChange, selectedDate }: DateInputProps) {
   const handleDateChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      onDateChange(moment(event.target.value));
+      const inputDate = moment(event.target.value);
+      if (inputDate.year() > MAX_INPUT_YEAR) {
+        inputDate.year(MAX_INPUT_YEAR);
+      }
+      onDateChange(inputDate);
     },
     [onDateChange]
   );
 
-  return <input onChange={handleDateChange} type="date" />;
+  return (
+    <input
+      value={selectedDate.format("YYYY-MM-DD")}
+      onChange={handleDateChange}
+      type="date"
+    />
+  );
 }
 
 export default DateInput;
