@@ -1,9 +1,7 @@
 import React from "react";
 import { SalaryDatesProps } from "./types";
-import { calculateSalaryDates } from "../../dateUtils";
 
-function SalaryDates({ selectedDate }: SalaryDatesProps) {
-  const salaryDates = calculateSalaryDates(selectedDate, 12);
+function SalaryDates({ salaryDates }: SalaryDatesProps) {
   return (
     <div>
       salary dates:
