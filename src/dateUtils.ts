@@ -28,6 +28,20 @@ const getBonusPayDay = (
   return payDay;
 };
 
+const isTooLateToMakePaymentAtThisMonth = (startDate: Moment): boolean => {
+  const endOfMonth = moment(startDate).endOf("month");
+  return (
+    (isSunday(startDate) || isSaturday(startDate)) &&
+    startDate.date() === endOfMonth.date()
+  );
+};
+
+const isToLateToPayBonusAtThisMonth = (
+  date: Moment,
+  bonusPayDayNumber: number
+): boolean =>
+  (!isSaturday(date) || !isSunday(date)) && date.date() > bonusPayDayNumber;
+
 export const calculateSalaryDates = (
   startDate: Moment,
   numberOfMonths: number
@@ -37,9 +51,13 @@ export const calculateSalaryDates = (
 
   let iterations = numberOfMonths;
 
+  if (isTooLateToMakePaymentAtThisMonth(startDate)) {
+    tmpEndOfMonth = tmpEndOfMonth.add(1, "month");
+  }
+
   while (iterations > 0) {
-    salaryDates.push(getLastWorkDayOfMonth(tmpEndOfMonth));
-    tmpEndOfMonth = tmpEndOfMonth.add("1", "month");
+    salaryDates.push(getLastWorkDayOfMonth(tmpEndOfMonth.endOf("month")));
+    tmpEndOfMonth = tmpEndOfMonth.add(1, "month");
     iterations = iterations - 1;
   }
 
@@ -52,12 +70,17 @@ export const calculateBonusesDates = (
   bonusPayDayNumber: number
 ): Array<Moment> => {
   const bonusesDates: Array<Moment> = [];
-  let tmpStartOfMonth = moment(startDate);
+  let tmpDate = moment(startDate);
   let iterations = numberOfMonths;
 
+  if (isToLateToPayBonusAtThisMonth(startDate, bonusPayDayNumber)) {
+    //make sure that we move to next month and not set date grater then next bonusPayDayNumber
+    tmpDate = tmpDate.endOf("month").add(1, "day");
+  }
+
   while (iterations > 0) {
-    bonusesDates.push(getBonusPayDay(tmpStartOfMonth, bonusPayDayNumber));
-    tmpStartOfMonth = tmpStartOfMonth.add("1", "month");
+    bonusesDates.push(getBonusPayDay(tmpDate, bonusPayDayNumber));
+    tmpDate = tmpDate.add(1, "month");
     iterations = iterations - 1;
   }
 
