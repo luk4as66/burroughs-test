@@ -17,6 +17,7 @@ function DateInput({ onDateChange, selectedDate }: DateInputProps) {
 
   return (
     <input
+      data-testid="input-date"
       value={selectedDate.format("YYYY-MM-DD")}
       onChange={handleDateChange}
       type="date"
