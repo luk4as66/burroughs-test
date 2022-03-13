@@ -1,4 +1,5 @@
 import moment, { Moment } from "moment";
+import { DATE_FORMAT } from "./constants";
 
 const isSunday = (date: Moment): boolean => date.day() === 0;
 const isSaturday = (date: Moment): boolean => date.day() === 6;
@@ -85,4 +86,10 @@ export const calculateBonusesDates = (
   }
 
   return bonusesDates;
+};
+
+export const convertToFormattedDateStringArray = (
+  dates: ReadonlyArray<Moment>
+): ReadonlyArray<string> => {
+  return dates.map((date) => date.format(DATE_FORMAT));
 };
