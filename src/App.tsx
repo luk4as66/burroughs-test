@@ -9,17 +9,28 @@ import {
   convertToFormattedDateStringArray,
 } from "./dateUtils";
 import moment, { Moment } from "moment";
-import { CSV_FILE_NAME, DATA_DELIMITER } from "./constants";
+import {
+  BONUS_PAY_DAY_NUMBER,
+  CSV_FILE_NAME,
+  DATA_DELIMITER,
+  NUMBER_OF_MONTHS,
+} from "./constants";
 
 function App() {
   const [selectedDate, setSelectedDate] = useState<Moment>(() => moment());
+
   const salaryDates = useMemo(
-    () => calculateSalaryDates(selectedDate, 12),
+    () => calculateSalaryDates(selectedDate, NUMBER_OF_MONTHS),
     [selectedDate]
   );
 
   const bonusDates = useMemo(
-    () => calculateBonusesDates(selectedDate, 12, 15),
+    () =>
+      calculateBonusesDates(
+        selectedDate,
+        NUMBER_OF_MONTHS,
+        BONUS_PAY_DAY_NUMBER
+      ),
     [selectedDate]
   );
 
