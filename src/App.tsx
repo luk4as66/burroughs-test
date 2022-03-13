@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useState } from "react";
 import "./App.css";
 import DateInput from "./components/dateInput/dateInput";
-import SalaryDates from "./components/salaryDates/salaryDates";
+import PayDates from "./components/payDates/payDates";
 import DataExport from "./components/dataExport/dataExport";
-import { calculateSalaryDates } from "./dateUtils";
+import { calculateBonusesDates, calculateSalaryDates } from "./dateUtils";
 import moment, { Moment } from "moment";
 
 function App() {
@@ -13,10 +13,16 @@ function App() {
     [selectedDate]
   );
 
+  const bonusDates = useMemo(
+    () => calculateBonusesDates(selectedDate, 12, 15),
+    [selectedDate]
+  );
+
   return (
     <div className="App">
       <DateInput onDateChange={setSelectedDate} />
-      <SalaryDates salaryDates={salaryDates} />
+      <PayDates label="Salary" dates={salaryDates} />
+      <PayDates label="Bonus" dates={bonusDates} />
       <DataExport />
     </div>
   );

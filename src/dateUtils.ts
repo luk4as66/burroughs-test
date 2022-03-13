@@ -14,6 +14,20 @@ const getLastWorkDayOfMonth = (lastDayOfMonth: Moment): Moment => {
   return lastWorkDay;
 };
 
+const getBonusPayDay = (
+  startDate: Moment,
+  bonusPayDayNumber: number
+): Moment => {
+  let payDay = moment(startDate).date(bonusPayDayNumber);
+  if (isSunday(payDay)) {
+    payDay = moment(payDay).add(3, "day");
+  } else if (isSaturday(payDay)) {
+    payDay = moment(payDay).add(4, "day");
+  }
+
+  return payDay;
+};
+
 export const calculateSalaryDates = (
   startDate: Moment,
   numberOfMonths: number
@@ -30,4 +44,22 @@ export const calculateSalaryDates = (
   }
 
   return salaryDates;
+};
+
+export const calculateBonusesDates = (
+  startDate: Moment,
+  numberOfMonths: number,
+  bonusPayDayNumber: number
+): Array<Moment> => {
+  const bonusesDates: Array<Moment> = [];
+  let tmpStartOfMonth = moment(startDate);
+  let iterations = numberOfMonths;
+
+  while (iterations > 0) {
+    bonusesDates.push(getBonusPayDay(tmpStartOfMonth, bonusPayDayNumber));
+    tmpStartOfMonth = tmpStartOfMonth.add("1", "month");
+    iterations = iterations - 1;
+  }
+
+  return bonusesDates;
 };
